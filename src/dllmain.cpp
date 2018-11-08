@@ -46,7 +46,8 @@ const std::wstring s2ws(const std::string& src)
     }
 }
 
-extern "C" __declspec(dllexport) const char * DumpModule(void *address, char *output_path)
+extern "C" __declspec(dllexport)
+const char * DumpModule(DWORD pid, void *address, char *output_path)
 {
     if (!address || !output_path)
     {
@@ -66,7 +67,7 @@ extern "C" __declspec(dllexport) const char * DumpModule(void *address, char *ou
     options.NumberOfThreads = 16; // Default 16 threads
     options.set_output_path(output_path);
 
-    auto dp = new dump_process(GetCurrentProcessId(), db, &options, true);
+    auto dp = new dump_process(pid, db, &options, true);
     dp->dump_region(reinterpret_cast<__int64>(address));
 }
 
